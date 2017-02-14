@@ -5,6 +5,7 @@ layout: default
 # Rubber Duck Debugging
 
 The rubber duck debugging method is as follows:
+
 1. Beg, borrow, steal, buy, fabricate or otherwise obtain a rubber duck (bathtub variety).
 2. Place rubber duck on desk and inform it you are just going to go over some code with it, if that's all right.
 3. Explain to the duck what your code is supposed to do, and then go into detail and explain your code line by line.
