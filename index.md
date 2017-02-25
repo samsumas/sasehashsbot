@@ -17,7 +17,7 @@ The rubber duck debugging method is as follows:
 
 ## FAQs
 - **If ducks are so smart, why don't we just let the ducks do all the work?**
-It would be wonderful if this were true, but the fact is that most duck's prefer to take a mentoring role. There are a few ducks however that do choose to code, but these are the duck's that nobody hears about because they are selected for secret government projects that are highly classified in nature.
+It would be wonderful if this were true, but the fact is that most duck's prefer to take a mentoring role. There are a few ducks however that do choose to code, but these are the ducks that nobody hears about because they are selected for secret government projects that are highly classified in nature.
 
 - **Where can I learn more about rubber duck debugging?**
 More information can be found [here](http://en.wikipedia.org/wiki/Rubber_duck_debugging) and [here](http://lists.ethernal.org/oldarchives/cantlug-0211/msg00174.html).
