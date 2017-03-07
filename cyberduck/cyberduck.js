@@ -4,7 +4,7 @@ var conf= {
 	id: 1,
 	termDiv:'cyberduckDiv',
 	frameColor: '#77777a',
-	ps: ' YOU:  ',
+	ps: ' YOU: ',
 	historyUnique: true,
 	initHandler: initHandler,
 	exitHandler: termExit,
