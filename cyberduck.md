@@ -36,4 +36,4 @@ layout: default
 Cyberduck is based on work by Joseph Weizenbaum and Norbert Landsteiner.
 
 - Weizenbaum, Joseph. **ELIZA – A Computer Program For the Study of Natural Language Communication Between Man and Machine.** *Communications of the ACM* Volume 9, Issue 1 (January 1966): p 36-45.<br/>
-- [http://www.masswerk.at/elizabot](http://www.masswerk.at/elizabot/)
+- Elizabot: [http://www.masswerk.at/elizabot](http://www.masswerk.at/elizabot/)

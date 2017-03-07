@@ -3,8 +3,8 @@
 // [cf: Communications of the ACM, Vol. 9, #1 (January 1966): p 36-45.]
 
 var cyberduckInitials = [
-"Hello. Please tell me your bug.",
-"Hello. Please tell me your problem.",
+"Hello. Please tell me your bug. Let's start at the beginning.",
+"Hello. Please tell me your problem. Be specific and go line by line.",
 "Please tell me what's been bothering you about your code.",
 "Is something troubling you about your code?"
 ];
@@ -606,3 +606,5 @@ var cyberduckPostTransforms = [
 	/\bI to have (\w+)/, "I have $1",
 	/Earlier you said your( own)? (\w+)( now)?\./, "Earlier you talked about your $2."
 ];
+
+// eof
