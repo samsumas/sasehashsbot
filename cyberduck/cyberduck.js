@@ -47,8 +47,8 @@ function initHandler() {
 		'           __/ |                                      ',
 		'          |___/',
 		' ',
-		'  - Cyberduck is a mock Rogerian psychotherapist.',
-		'  - The original program was described by Joseph Weizenbaum in 1966.',
+		'  - Cyberduck is a mock Rogerian psychotherapist (for debugging).',
+		'  - The original concept program was described by Joseph Weizenbaum in 1966.',
 		'  - Terminal themed implementation was created by Norbert Landsteiner in 2005.',
 		'  - This debugging themed implementation by Ben Holland in 2017.', 
 		'%n%n'
