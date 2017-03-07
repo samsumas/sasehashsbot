@@ -4,7 +4,7 @@ var conf= {
 	id: 1,
 	termDiv:'cyberduckDiv',
 	frameColor: '#77777a',
-	ps: 'YOU:  ',
+	ps: ' YOU:  ',
 	historyUnique: true,
 	initHandler: initHandler,
 	exitHandler: termExit,
@@ -53,7 +53,7 @@ function initHandler() {
 		'  - This debugging themed implementation by Ben Holland in 2017.', 
 		'%n%n'
 		]);
-	this.type('CYBERDUCK: '+cyberduckInitials[Math.floor(Math.random()*cyberduckInitials.length)]);
+	this.type(' CYBERDUCK: '+cyberduckInitials[Math.floor(Math.random()*cyberduckInitials.length)]);
 	this.prompt();
 }
 
@@ -65,7 +65,7 @@ function termHandler() {
 		return;
 	}
 	// transform
-	this.write('%nCYBERDUCK: '+cyberduck.transform(line));
+	this.write('%n CYBERDUCK: '+cyberduck.transform(line));
 	if (cyberduck.quit) {
 		setTimeout('term.close()',2500);
 		return;
