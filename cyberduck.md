@@ -9,8 +9,9 @@ layout: default
 <script type="text/javascript" src="../cyberduck/cyberduck.js"></script>
 <link rel="stylesheet" type="text/css" href="../cyberduck/cyberduck.css" />
 
+# Talk with a Duck
+
 <center>
-	<img src="https://raw.githubusercontent.com/RubberDuckDebugging/rubberduckdebugging.github.io/master/images/rubberducky.png" alt="Cyberduck" />
 	<table border="0" cellspacing="10" cellpadding="0" width="100%">
 		<tr>
 			<td align="center">
