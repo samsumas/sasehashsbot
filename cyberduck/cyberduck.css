@@ -1,0 +1,27 @@
+.term {
+	font-family: courier,fixed;
+	font-size: 12px;
+	color: #aaccaa;
+	background: none;
+}
+
+.termReverse {
+	font-family: courier,fixed;
+	font-size: 12px;
+	color: #111111;
+	background: #aaccaa;
+}
+
+grey,.grey {
+	font-family: courier,fixed;
+	font-size: 12px;
+	color: #999999;
+}
+
+.lh13 {
+	line-height: 13px;
+}
+
+.lh15 {
+	line-height: 15px;
+}
