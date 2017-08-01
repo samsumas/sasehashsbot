@@ -37,7 +37,7 @@ function setTermLink(v) {
 
 function initHandler() {
 	this.write( [
-		'  You are now in a online chat room with: ',
+		'  You are now in an online chat room with: ',
 		'    _____       _                  _            _     ',
 		'   /  __ \\     | |                | |          | |    ',
 		'   | /  \\/_   _| |__   ___ _ __ __| |_   _  ___| | __ ',
