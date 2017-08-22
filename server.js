@@ -14,7 +14,8 @@ let lenny; // cache, contains the foodporn images for lenny
 let lennypage = 1; // contains the nth result page in lenny
 let lennypos = 1; // contains the nth result in lenny
 const paradise = []; // contains a lot of paradisiac things
-
+let webfailcounter = 0; // counter for /webfail
+let webfail; // save dom of webfail here
 const appendName = arr =>
   // transform ['test','b'] in ['test','test@botname','b','b@botname']
   _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));
@@ -23,6 +24,46 @@ const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
 
 bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://www.jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
+const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
+  if (link.search(/\.jpg$/)) {
+    replyWithPhoto(link);
+  } else {
+    // its a GIF!
+    replyWithVideo(link);
+  }
+  webfailcounter++;
+};
+
+bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }) => {
+  if (webfail !== undefined && webfail.nextElementSibling !== undefined) {
+    const temp = webfail.nextElementSibling;
+    const link = temp.querySelector('div:nth-child(2) a img').src;
+    webfailHelper(link, replyWithPhoto, replyWithVideo);
+    webfailcounter++;
+  } else if (webfailcounter === 0) {
+  // loads first webpage
+    // downloads the page and put it in webfail
+    najax({ url: 'http://webfail.com', type: 'GET' }).success((site) => {
+      webfail = new JSDOM(site).window.document.querySelector('#posts article:first-child');
+      webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
+      console.log('this looks ok');
+    }).error(err => /* console.log(JSON.stringify(err) */ console.log('Error1'));
+  } else {
+    // loads next webpage
+    // gets token to load the posts...but it isnt very beautiful i admit
+    const token = webfail.querySelector('script').textContent.replace(/.*tnxt = "/, '').replace('";', '');
+    najax({
+      url: `http://webfail.com/ajax-index/${token}`,
+      type: 'GET' }).success((site) => {
+      // save new page in webfail
+      webfail = new JSDOM(site).window.document.body.firstChild;
+      // send new post
+      webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
+    }).error(err => /* console.log(JSON.stringify(err) */ console.log('Error2'));
+    console.log('hier');
+  }
+  console.log('Ok');
+});
 
 bot.command(appendName(['lennysdeath', 'lenny']), ({ replyWithPhoto }) => {
   // loads lenny if empty
