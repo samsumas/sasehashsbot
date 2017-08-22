@@ -15,8 +15,7 @@ let lenny; // cache, contains the foodporn images for lenny
 let lennypage = 1; // contains the nth result page in lenny
 let lennypos = 1; // contains the nth result in lenny
 const paradise = []; // contains a lot of paradisiac things
-let webfailcounter = 0; // counter for /webfail
-let webfail; // save dom of webfail here
+
 const appendName = arr =>
   // transform ['test','b'] in ['test','test@botname','b','b@botname']
   _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));
