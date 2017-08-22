@@ -5,6 +5,7 @@ const { JSDOM } = require('jsdom');
 const _ = require('underscore');
 const fs = require('fs');
 require('dotenv').config(); // for apikeys
+const fetch = require('fetch');
 
 const dictionary = loadJsonFile.sync('./samisDictionary.json');
 const userDic = loadJsonFile.sync('./userDic.json');
@@ -43,23 +44,21 @@ bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }
   } else if (webfailcounter === 0) {
   // loads first webpage
     // downloads the page and put it in webfail
-    najax({ url: 'http://webfail.com', type: 'GET' }).success((site) => {
+    fetch('http://webfail.com').then((site) => {
       webfail = new JSDOM(site).window.document.querySelector('#posts article:first-child');
       webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
       console.log('this looks ok');
-    }).error(err => /* console.log(JSON.stringify(err) */ console.log('Error1'));
+    }).catch(err => /* console.log(JSON.stringify(err) */ console.log('Error1'));
   } else {
     // loads next webpage
     // gets token to load the posts...but it isnt very beautiful i admit
     const token = webfail.querySelector('script').textContent.replace(/.*tnxt = "/, '').replace('";', '');
-    najax({
-      url: `http://webfail.com/ajax-index/${token}`,
-      type: 'GET' }).success((site) => {
+    fetch(`http://webfail.com/ajax-index/${token}`).then((site) => {
       // save new page in webfail
       webfail = new JSDOM(site).window.document.body.firstChild;
       // send new post
       webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
-    }).error(err => /* console.log(JSON.stringify(err) */ console.log('Error2'));
+    }).catch(err => /* console.log(JSON.stringify(err) */ console.log('Error2'));
     console.log('hier');
   }
   console.log('Ok');
