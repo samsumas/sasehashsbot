@@ -5,7 +5,6 @@ const { JSDOM } = require('jsdom');
 const _ = require('underscore');
 const fs = require('fs');
 require('dotenv').config(); // for apikeys
-const fetch = require('fetch');
 
 const dictionary = loadJsonFile.sync('./samisDictionary.json');
 const userDic = loadJsonFile.sync('./userDic.json');
@@ -15,6 +14,8 @@ let lenny; // cache, contains the foodporn images for lenny
 let lennypage = 1; // contains the nth result page in lenny
 let lennypos = 1; // contains the nth result in lenny
 const paradise = []; // contains a lot of paradisiac things
+let webfail;
+let webfailcounter = 0;
 
 const appendName = arr =>
   // transform ['test','b'] in ['test','test@botname','b','b@botname']
@@ -43,24 +44,30 @@ bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }
   } else if (webfailcounter === 0) {
   // loads first webpage
     // downloads the page and put it in webfail
-    fetch('http://webfail.com').then((site) => {
+    najax({
+      url: 'https://webfail.com/',
+      type: 'GET',
+      headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 OPR/47.0.2631.39' } }).success((site) => {
+      console.log(JSON.stringify(new JSDOM(site)));
       webfail = new JSDOM(site).window.document.querySelector('#posts article:first-child');
       webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
       console.log('this looks ok');
-    }).catch(err => /* console.log(JSON.stringify(err) */ console.log('Error1'));
+    }).error(err => console.log(JSON.stringify(err)));
   } else {
     // loads next webpage
     // gets token to load the posts...but it isnt very beautiful i admit
     const token = webfail.querySelector('script').textContent.replace(/.*tnxt = "/, '').replace('";', '');
-    fetch(`http://webfail.com/ajax-index/${token}`).then((site) => {
+    najax({
+      url: `http://webfail.com/ajax-index/${token}`,
+      type: 'GET',
+      headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 OPR/47.0.2631.39' } }).success((site) => {
       // save new page in webfail
       webfail = new JSDOM(site).window.document.body.firstChild;
       // send new post
       webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
-    }).catch(err => /* console.log(JSON.stringify(err) */ console.log('Error2'));
+    }).error(err => console.log(JSON.stringify(err)));
     console.log('hier');
   }
-  console.log('Ok');
 });
 
 bot.command(appendName(['lennysdeath', 'lenny']), ({ replyWithPhoto }) => {
