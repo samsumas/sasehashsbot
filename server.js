@@ -48,11 +48,13 @@ bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }
       url: 'https://webfail.com/',
       type: 'GET',
       headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 OPR/47.0.2631.39' } }).success((site) => {
-      console.log(JSON.stringify(new JSDOM(site)));
+      console.log(JSON.stringify(site));
+      console.log('afternajax');
       webfail = new JSDOM(site).window.document.querySelector('#posts article:first-child');
       webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
       console.log('this looks ok');
     }).error(err => console.log(JSON.stringify(err)));
+    console.log('aftererror');
   } else {
     // loads next webpage
     // gets token to load the posts...but it isnt very beautiful i admit
