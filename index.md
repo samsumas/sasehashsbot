@@ -23,4 +23,4 @@ It would be wonderful if this were true, but the fact is that most ducks prefer 
 More information can be found at [wikipedia.org](http://en.wikipedia.org/wiki/Rubber_duck_debugging), [lists.ethernal.org](http://lists.ethernal.org/oldarchives/cantlug-0211/msg00174.html), and [zenhub.com](https://www.zenhub.com/blog/why-rubber-duck-debugging-is-the-best-way-to-debug-your-code/).
 
 - **Where can I hire my own duck?**
-Great question! [Amazon.com](https://www.amazon.com) hosts a wide selection of affordable ducks that have graduated with a technical degree from some of the world's leading universities.
+Great question! [Amazon.com](https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=rubber+duck) hosts a wide selection of affordable ducks that have graduated with a technical degree from some of the world's leading universities.
