@@ -20,7 +20,7 @@ The rubber duck debugging method is as follows:
 It would be wonderful if this were true, but the fact is that most ducks prefer to take a mentoring role. There are a few ducks however that do choose to code, but these are the ducks that nobody hears about because they are selected for secret government projects that are highly classified in nature.
 
 - **Where can I learn more about rubber duck debugging?**
-More information can be found at [wikipedia.org](http://en.wikipedia.org/wiki/Rubber_duck_debugging), [lists.ethernal.org](http://lists.ethernal.org/oldarchives/cantlug-0211/msg00174.html), and [zenhub.com](https://www.zenhub.com/blog/why-rubber-duck-debugging-is-the-best-way-to-debug-your-code/).
+More information can be found at [wikipedia.org](http://en.wikipedia.org/wiki/Rubber_duck_debugging), [lists.ethernal.org](http://lists.ethernal.org/oldarchives/cantlug-0211/msg00174.html), [Coding Horror](https://blog.codinghorror.com/rubber-duck-problem-solving/), and [zenhub.com](https://www.zenhub.com/blog/why-rubber-duck-debugging-is-the-best-way-to-debug-your-code/).
 
 - **Where can I hire my own duck?**
 Great question! [Amazon.com](https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=rubber+duck) hosts a wide selection of affordable ducks that have graduated with a technical degree from some of the world's leading universities.
