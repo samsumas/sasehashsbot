@@ -24,3 +24,6 @@ More information can be found at [wikipedia.org](http://en.wikipedia.org/wiki/Ru
 
 - **Where can I hire my own duck?**
 Great question! [Amazon.com](https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=rubber+duck) hosts a wide selection of affordable ducks that have graduated with a technical degree from some of the world's leading universities.
+
+- **Why does this site exist?**
+As a young intern in 2008 I pestered a mentor of mine similar to [Kevin's Rubber Duck Story](https://www.youtube.com/watch?v=huOPVqztPdc) and eventually my mentor pointed me at the [original lists.ethernal.org post by Andy](http://lists.ethernal.org/oldarchives/cantlug-0211/msg00174.html). That night I ordered a rubber duck from Amazon and purchased this domain name as a way of owning up to my behavior.
