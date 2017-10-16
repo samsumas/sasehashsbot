@@ -35,6 +35,9 @@ const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
   webfailcounter++;
 };
 
+bot.command(appendName(['getid']), (ctx) => {
+  ctx.reply('You are :' + ctx.from);
+}
 bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }) => {
   if (webfail !== undefined && webfail.nextElementSibling !== undefined) {
     const temp = webfail.nextElementSibling;
