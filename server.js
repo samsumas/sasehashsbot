@@ -36,7 +36,7 @@ const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
 };
 
 bot.command(appendName(['getid']), (ctx) => {
-  ctx.reply('You are :' + ctx.from);
+  ctx.reply(`You are :${JSON.stringify(ctx.from)} from ${JSON.stringify(ctx.chat)}`);
 });
 
 bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }) => {
