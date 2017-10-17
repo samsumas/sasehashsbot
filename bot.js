@@ -4,6 +4,8 @@ const loadJsonFile = require('load-json-file');
 const { JSDOM } = require('jsdom');
 const _ = require('underscore');
 const fs = require('fs');
+const http = require('http');
+const process = require('child_process');
 require('dotenv').config(); // for apikeys
 
 const dictionary = loadJsonFile.sync('./samisDictionary.json');
@@ -17,6 +19,28 @@ const paradise = []; // contains a lot of paradisiac things
 let webfail;
 let webfailcounter = 0;
 
+// start the server. The server gets a request from github and then updates the local repo
+http.createServer((req, res) => {
+  switch (req.url) {
+    case '/push' :
+      process.exec('git pull | grep "Already up-to-date."', (error) => {
+        if (error) {
+        // not so beautiful way to restart this script
+          throw 'Rebooting after update...';
+        }
+        throw 'abc';
+      });
+      res.write('local repo updated. This is a stub');
+      break;
+    case '/test' :
+      res.write('This is a test');
+      break;
+    default:
+      res.write('404 not found');
+      break;
+  }
+  res.end();
+}).listen(8080);
 const appendName = arr =>
   // transform ['test','b'] in ['test','test@botname','b','b@botname']
   _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));

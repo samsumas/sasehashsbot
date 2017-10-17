@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "child_process": "^1.0.2",
     "dotenv": "^4.0.0",
     "fetch": "^1.1.0",
     "fs": "^0.0.1-security",
@@ -20,8 +21,9 @@
     "eslint-plugin-import": "^2.7.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/eslint --fix server.js",
-    "start": "function startNode { node server.js; startNode; } ; startNode;"
+    "test": "./node_modules/.bin/eslint --fix bot.js",
+    "server": "./node_modules/.bin/eslint --fix server.js ; node server.js",
+    "start": "function startNode { node bot.js; startNode; } ; startNode;"
   },
   "repository": {
     "type": "git",
