@@ -6,6 +6,7 @@ const _ = require('underscore');
 const fs = require('fs');
 const childProcess = require('child_process');
 const http = require('http');
+
 const PORT = 8080;
 require('dotenv').config(); // for apikeys
 
@@ -63,6 +64,14 @@ const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
 
 bot.command(appendName(['getid']), (ctx) => {
   ctx.reply(`You are :${JSON.stringify(ctx.from)} from ${JSON.stringify(ctx.chat)}`);
+});
+
+bot.command(appendName(['getip']), ({ reply }) => {
+  najax({
+    url: 'https://httpbin.org/ip',
+    type: 'GET',
+  }).success(r => reply(`Try 1:${JSON.parse(r).origin}`));
+  najax({ url: 'http://myexternalip.com/raw' }).success(r => reply(`Try 2:${r}`));
 });
 
 bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }) => {
