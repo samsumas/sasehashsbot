@@ -22,26 +22,26 @@ let webfail;
 let webfailcounter = 0;
 
 // start the server. The server gets a request from github and then updates the local repo
-http.createServer((req, res) => {
-  switch (req.url) {
-    case '/push' :
-      childProcess.exec('git pull | grep "Already up-to-date."', (error) => {
-        if (error) {
-        // not so beautiful way to restart this script
-          throw 'Rebooting after update...';
-        }
-      });
-      res.write('Repo not updated');
-      break;
-    case '/test' :
-      res.write('This is a test');
-      break;
-    default:
-      res.write('404 not found');
-      break;
-  }
-  res.end();
-}).listen(PORT);
+//http.createServer((req, res) => {
+//  switch (req.url) {
+//    case '/push' :
+//      childProcess.exec('git pull | grep "Already up-to-date."', (error) => {
+//        if (error) {
+//        // not so beautiful way to restart this script
+//          throw 'Rebooting after update...';
+//        }
+//      });
+//      res.write('Repo not updated');
+//      break;
+//    case '/test' :
+//      res.write('This is a test');
+//      break;
+//    default:
+//      res.write('404 not found');
+//      break;
+//  }
+//  res.end();
+//}).listen(PORT);
 
 
 const appendName = arr =>
@@ -61,7 +61,6 @@ const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
   }
   webfailcounter++;
 };
-
 bot.command(appendName(['getid']), (ctx) => {
   ctx.reply(`You are :${JSON.stringify(ctx.from)} from ${JSON.stringify(ctx.chat)}`);
 });
@@ -166,6 +165,9 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
   }
 });
 
+bot.hears(/^\/sayHelloTo (.*)$/, ( ctx ) => {
+    ctx.telegram.sendMessage(ctx.match[1],`Hello from ${ctx.message.from.username}!`)
+});
 bot.hears(/^\/(.)olo$/, ({ match, reply }) => {
   const tab = {
     s: 'Sami',
