@@ -20,6 +20,7 @@ let lennypos = 1; // contains the nth result in lenny
 const paradise = []; // contains a lot of paradisiac things
 let webfail;
 let webfailcounter = 0;
+let maxChars = 100;
 
 // start the server. The server gets a request from github and then updates the local repo
 //http.createServer((req, res) => {
@@ -43,6 +44,7 @@ let webfailcounter = 0;
 //  res.end();
 //}).listen(PORT);
 
+const invalidSize = str => str.length > maxChars;
 
 const appendName = arr =>
   // transform ['test','b'] in ['test','test@botname','b','b@botname']
@@ -181,9 +183,12 @@ bot.hears(new RegExp(`^\/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), 
 });
 
 bot.hears(/^\/sayHelloTo (.*)$/, ( ctx ) => {
-    ctx.telegram.sendMessage(ctx.match[1],`Hello from ${ctx.message.from.username}!`)
+    ctx.telegram.sendMessage(ctx.match[1],`Hello from ${ctx.message.from.first_name}!`)
 });
 bot.hears(/^\/(.)olo$/, ({ match, reply }) => {
+  if (invalidSize(match[1])) {
+      return;
+  }
   const tab = {
     s: 'Sami',
     c: 'Carl',
@@ -253,6 +258,7 @@ const imgurAlbumHelper = (curr, replyWithVideo, replyWithPhoto, reply) => {
 // page (actual page number)
 // json (api output)
 bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn][Nn][Yy].*)`), ({ match, replyWithVideo, replyWithPhoto, reply }) => {
+  
   let query;
   if (match[2] === undefined) { query = 'foodporn'; } else { query = match[2].toLowerCase(); }
   const sort = 'top';
@@ -287,6 +293,9 @@ bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn]
 
 
 bot.hears(new RegExp(`correct(@${process.env.BOT_NAME})? ([^ ]+) => (.*)`), ({ match, replyWithMarkdown }) => {
+  if(invalidSize(match[2]) || invalidSize(match[3])) {
+      return;
+  }
   userDic[match[2].toLowerCase()] = match[3].replace(/`/g, '\\`');
   replyWithMarkdown(`Change Saved : Try it out !\n\`/check@${process.env.BOT_NAME} ${match[2]}\``);
   fs.readFile('userDic.json', (err, data) => {
@@ -306,6 +315,9 @@ bot.hears(new RegExp(`correct(@${process.env.BOT_NAME})? ([^ ]+) => (.*)`), ({ m
 });
 
 bot.hears(/sudo(@[^ ]+)+ (.+)/, ({ match, reply }) => {
+  if (invalidSize(match[2])) {
+      return;
+  }
   reply('Access granted.');
   reply(`Executing following command '${match[2]}' with administrator right.`);
   reply(match[1]);
@@ -319,6 +331,9 @@ bot.hears(/sudo(@[^ ]+)+ (.+)/, ({ match, reply }) => {
 
 
 bot.hears(new RegExp(`check(@${process.env.BOT_NAME})? (.+)`), ({ match, replyWithMarkdown }) => {
+  if(invalidSize(match[2])) {
+      return;
+  }
   const input = match[2].toLowerCase().replace(/`/g, '\\`').split(' ');
   let hasChange = false;
 
