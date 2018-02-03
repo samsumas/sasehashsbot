@@ -165,7 +165,7 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
   }
 });
 
-bot.hears(new RegExp(`(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), ( ctx ) => {
+bot.hears(new RegExp(`^\/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), ( ctx ) => {
     let time;
     if (ctx.match[3] > 70000) {
         ctx.reply(`This is too much for me, try with less time (expressed in minutes)`);
