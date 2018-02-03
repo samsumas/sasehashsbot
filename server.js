@@ -169,6 +169,18 @@ bot.command(appendName(['tee', 'teetimer']), ({ reply }) => {
     reply("Starting 3 minute tea timer...");
     setTimeout( () => { reply("Tea is ready~~~"); }, 180000);
 });
+
+bot.hears(new RegExp(`(tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), ({ match, reply }) => {
+    let time;
+    if (match[3] == 0) {
+        time = 3;
+    } else {
+        time = match[3];
+    }
+    reply(`Starting ${time} minute tea timer...`);
+    setTimeout( () => { reply("Tea is ready~~~"); }, time*60*1000);
+});
+
 bot.hears(/^\/sayHelloTo (.*)$/, ( ctx ) => {
     ctx.telegram.sendMessage(ctx.match[1],`Hello from ${ctx.message.from.username}!`)
 });
