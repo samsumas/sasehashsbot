@@ -165,15 +165,21 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
   }
 });
 
-bot.hears(new RegExp(`(tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), ({ match, reply }) => {
+bot.hears(new RegExp(`(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), ( ctx ) => {
     let time;
-    if (match[3] == 0) {
+    if (ctx.match[3] > 70000) {
+        ctx.reply(`This is too much for me, try with less time (expressed in minutes)`);
+            return;
+    }
+    if (ctx.match[3] == 0) {
         time = 3;
     } else {
-        time = match[3];
+        time = ctx.match[3];
     }
-    reply(`Starting ${time} minute tea timer...`);
-    setTimeout( () => { reply("Tea is ready~~~"); }, time*60*1000);
+    ctx.reply(`Starting ${time} minute tea timer...`);
+    let s="";
+    if (time != 1) { s = "s" };
+    setTimeout( () => { ctx.reply(`${ctx.message.from.username}, your ${time} minute${s} tea is ready!`); }, time*60*1000);
 });
 
 bot.hears(/^\/sayHelloTo (.*)$/, ( ctx ) => {
