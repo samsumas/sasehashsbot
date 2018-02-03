@@ -165,11 +165,6 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
   }
 });
 
-bot.command(appendName(['tee', 'teetimer']), ({ reply }) => {
-    reply("Starting 3 minute tea timer...");
-    setTimeout( () => { reply("Tea is ready~~~"); }, 180000);
-});
-
 bot.hears(new RegExp(`(tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), ({ match, reply }) => {
     let time;
     if (match[3] == 0) {
