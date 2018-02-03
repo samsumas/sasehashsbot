@@ -44,9 +44,6 @@ let maxChars = 100;
 //  res.end();
 //}).listen(PORT);
 
-bot.catch((err) => {
-  console.log('Catched following error :', err)
-})
 
 const invalidSize = str => str.length > maxChars;
 
@@ -55,6 +52,10 @@ const appendName = arr =>
   _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));
 
 const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
+
+bot.catch((err) => {
+  console.log('Catched following error :', err)
+})
 
 bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://www.jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
