@@ -165,6 +165,10 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
   }
 });
 
+bot.command(appendName(['tee', 'teetimer']), ({ reply }) => {
+    reply("Starting 3 minute tea timer...");
+    setTimeout( () => { reply("Tea is ready~~~"); }, 180000);
+});
 bot.hears(/^\/sayHelloTo (.*)$/, ( ctx ) => {
     ctx.telegram.sendMessage(ctx.match[1],`Hello from ${ctx.message.from.username}!`)
 });
