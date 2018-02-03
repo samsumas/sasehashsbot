@@ -44,6 +44,10 @@ let maxChars = 100;
 //  res.end();
 //}).listen(PORT);
 
+bot.catch((err) => {
+  console.log('Catched following error :', err)
+})
+
 const invalidSize = str => str.length > maxChars;
 
 const appendName = arr =>
