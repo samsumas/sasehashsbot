@@ -245,7 +245,7 @@ bot.command(appendName(['nextquote']), ({ reply }) => {
   }
 });
 
-bot.command(appendName(['doctor', 'help']), ({ reply }) => reply(cyberDuck.getInitial()));
+bot.command(appendName(['doctor', 'help', 'cyberDuck']), ({ reply }) => reply(cyberDuck.getInitial()));
 bot.hears(new RegExp('^/r(@${process.env.BOT_NAME})? (.*)'), ({ match, reply }) => reply(cyberDuck.transform(match[2])));
 
 // sends the images
