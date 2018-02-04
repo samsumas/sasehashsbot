@@ -45,7 +45,6 @@
             changed code to work around.
 */
 
-
 function CyberduckBot(noRandomFlag) {
 	this.noRandom= (noRandomFlag)? true:false;
 	this.capitalizeFirstLetter=true;
@@ -55,6 +54,8 @@ function CyberduckBot(noRandomFlag) {
 	if (!this._dataParsed) this._init();
 	this.reset();
 }
+
+module.exports = CyberduckBot;
 
 CyberduckBot.prototype.reset = function() {
 	this.quit=false;
@@ -71,7 +72,7 @@ CyberduckBot.prototype._dataParsed = false;
 
 CyberduckBot.prototype._init = function() {
 	// install ref to global object
-	var global=CyberduckBot.prototype.global=self;
+	var global=CyberduckBot.prototype.global=this;
 	// parse data and convert it from canonical form to internal use
 	// prodoce synonym list
 	var synPatterns={};
