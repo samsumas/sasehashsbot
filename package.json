@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/eslint --fix server.js",
-    "start": "function startNode { node server.js; startNode; } ; startNode;"
+    "start": "while true; do node server.js; node clean.js; done"
   },
   "repository": {
     "type": "git",
