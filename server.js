@@ -4,7 +4,8 @@ const loadJsonFile = require('load-json-file');
 const { JSDOM } = require('jsdom');
 const _ = require('underscore');
 const fs = require('fs');
-const Cyberduck = require('./cyberduck/cyberduckbot.js');
+//const Cyberduck = require('./cyberduck/cyberduckbot.js');
+const Cyberduck = require('./nodeCyberduck.js');
 // const childProcess = require('child_process');
 // const http = require('http');
 
@@ -245,7 +246,7 @@ bot.command(appendName(['nextquote']), ({ reply }) => {
 });
 
 bot.command(appendName(['doctor', 'help']), ({ reply }) => reply(cyberDuck.getInitial()));
-bot.hears(new RegExp('^/r (.*)'), ({ match, reply }) => reply(cyberDuck.transform(match[1])));
+bot.hears(new RegExp('^/r(@${process.env.BOT_NAME})? (.*)'), ({ match, reply }) => reply(cyberDuck.transform(match[2])));
 
 // sends the images
 const imgurAlbumHelper = (curr, replyWithVideo, replyWithPhoto, reply) => {
