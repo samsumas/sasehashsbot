@@ -70,7 +70,7 @@ bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
             honhonhoncache = new JSDOM(res).window.document.getElementsByClassName('text-justify texte');
             honhonhonpos = 0;
         }).then(() => {
-            reply(honhonhoncache[honhonhonpos++].textContent)
+            reply(honhonhoncache[honhonhonpos++].textContent);
         });
     } else {
         reply(honhonhoncache[honhonhonpos++].textContent);
