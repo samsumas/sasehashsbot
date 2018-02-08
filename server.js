@@ -227,23 +227,23 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
     }
 });
 
-bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9])`), (ctx) => {
+bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9])`, 'i'), (ctx) => {
     const time = parseInt(ctx.match[3] * 60, 10) + parseInt(ctx.match[4], 10);
     const today = new Date();
     let wait = time - (today.getHours() * 60) - today.getMinutes();
     if (wait < 0) {
         wait += 86400;
     }
-    if (${wait} === 1) {
-        ctx.reply(`Wecker klingelt in einer Minute`);
+    if (wait === 1) {
+        ctx.reply('{ctx.message.from.first_name}s Wecker klingelt in einer Minute');
     } else {
-        ctx.reply(`Wecker klingelt in ${wait} Minuten`);
+        ctx.reply(`{ctx.message.from.first_name}s Wecker klingelt in ${wait} Minuten`);
     }
-    setTimeout(() => { ctx.reply(`⏰ Klingel Klingel ${ctx.message.from.first_name}!`); }, wait * 60 * 1000);
+    setTimeout(() => { ctx.reply(`⏰⏰⏰${ctx.message.from.first_name}s Wecker klingelt!⏰⏰⏰`); }, wait * 60 * 1000);
 });
 
 
-bot.hears(new RegExp(`^/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), (ctx) => {
+bot.hears(new RegExp(`^/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`, 'i'), (ctx) => {
     let time;
     if (ctx.match[3] > 70000) {
         ctx.reply('This is too much for me, try with less time (expressed in minutes)');
@@ -276,7 +276,7 @@ bot.hears(/^\/(.)olo$/, ({ match, reply }) => {
 });
 
 
-bot.hears(new RegExp(`getquote(@${process.env.BOT_NAME})? (.*)`), ({ match, reply }) => {
+bot.hears(new RegExp(`getquote(@${process.env.BOT_NAME})? (.*)`, 'i'), ({ match, reply }) => {
     if (match[2] === '') {
         najax({ url: 'https://www.brainyquote.com/quotes_of_the_day.html', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByTagName('img')[1].getAttribute('alt')));
     } else {
@@ -314,7 +314,7 @@ bot.command(appendName(['nextquote']), ({ reply }) => {
 });
 
 bot.command(appendName(['doctor', 'help', 'cyberDuck']), ({ reply }) => reply(cyberDuck.getInitial()));
-bot.hears(new RegExp(`^/r(@${process.env.BOT_NAME})? (.*)`), ({ match, reply }) => reply(cyberDuck.transform(match[2])));
+bot.hears(new RegExp(`^/r(@${process.env.BOT_NAME})? (.*)`, 'i'), ({ match, reply }) => reply(cyberDuck.transform(match[2])));
 
 // sends the images
 const imgurAlbumHelper = (curr, replyWithVideo, replyWithPhoto, reply) => {
@@ -334,7 +334,7 @@ const imgurAlbumHelper = (curr, replyWithVideo, replyWithPhoto, reply) => {
 // pos (which image are we on)
 // page (actual page number)
 // json (api output)
-bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn][Nn][Yy].*)`), ({ match, replyWithVideo, replyWithPhoto, reply }) => {
+bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn][Nn][Yy].*)`, 'i'), ({ match, replyWithVideo, replyWithPhoto, reply }) => {
     let query;
     if (match[2] === undefined) { query = 'foodporn'; } else { query = match[2].toLowerCase(); }
     const sort = 'top';
@@ -368,7 +368,7 @@ bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn]
 });
 
 
-bot.hears(new RegExp(`correct(@${process.env.BOT_NAME})? ([^ ]+) => (.*)`), ({ match, replyWithMarkdown }) => {
+bot.hears(new RegExp(`correct(@${process.env.BOT_NAME})? ([^ ]+) => (.*)`, 'i'), ({ match, replyWithMarkdown }) => {
     if (invalidSize(match[2]) || invalidSize(match[3])) {
         return;
     }
@@ -406,7 +406,7 @@ bot.hears(/sudo(@[^ ]+)+ (.+)/, ({ match, reply }) => {
 });
 
 
-bot.hears(new RegExp(`check(@${process.env.BOT_NAME})? (.+)`), ({ match, replyWithMarkdown }) => {
+bot.hears(new RegExp(`check(@${process.env.BOT_NAME})? (.+)`, 'i'), ({ match, replyWithMarkdown }) => {
     if (invalidSize(match[2])) {
         return;
     }
