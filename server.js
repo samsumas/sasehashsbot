@@ -79,6 +79,7 @@ bot.command(appendName(['getid']), (ctx) => {
 bot.command(appendName(['getip']), ({ reply }) => {
     najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => reply(`http://[${r}]:${PORT}/`));
 });
+bot.command(appendName(['start']), ({ reply }) => reply('Sasehashs fantastical Bot. Look me up on Github (https://github.com/samsumas/Funny-TelegramBot).\n\n btw it uses Arch ❤️'));
 
 
 bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
