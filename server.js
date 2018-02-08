@@ -4,7 +4,7 @@ const loadJsonFile = require('load-json-file');
 const { JSDOM } = require('jsdom');
 const _ = require('underscore');
 const fs = require('fs');
-//const Cyberduck = require('./cyberduck/cyberduckbot.js');
+// const Cyberduck = require('./cyberduck/cyberduckbot.js');
 const Cyberduck = require('./nodeCyberduck.js');
 // const childProcess = require('child_process');
 // const http = require('http');
@@ -80,50 +80,49 @@ bot.command(appendName(['getip']), ({ reply }) => {
 });
 
 
-
-bot.command(appendName(['mensa']), ({ replyWithMarkdown }) => {
-  najax({ url: 'https://mensaar.de/api/1/${process.env.mensaarapikey}/1/de/getMenu/sb' }).success((res) => {
-    var json = JSON.parse(res);
+bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
+  najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
+    const json = JSON.parse(res);
 
     const regularExpressions = [
       { name: 'burger', emoji: '🍔' },
-      { name: 'pizza', emoji: '🍕'},
-      { name: 'apfel', emoji: '🍎'},
-      { name: 'reis', emoji: '🍚'},
-      { name: 'hähnchen', emoji: '🍗'},
-      { name: 'schwein', emoji: '🍖'},
-      { name: 'kartofel', emoji: '🥔'},
-      { name: 'salat', emoji: '🥗'},
-      { name: 'käse', emoji: '🧀'},
-      { name: 'nudel', emoji: '🍝'},
-      { name: 'eier', emoji: '🥚'},
-      { name: 'spaghetti', emoji: '🍝'},
-      { name: 'teigwaren', emoji: '🍝'},
-      { name: 'pfannkuchen', emoji: '🥞'},
-      { name: 'crêpe', emoji: '🥞'},
+      { name: 'pizza', emoji: '🍕' },
+      { name: 'apfel', emoji: '🍎' },
+      { name: 'reis', emoji: '🍚' },
+      { name: 'hähnchen', emoji: '🍗' },
+      { name: 'schwein', emoji: '🍖' },
+      { name: 'kartofel', emoji: '🥔' },
+      { name: 'salat', emoji: '🥗' },
+      { name: 'käse', emoji: '🧀' },
+      { name: 'nudel', emoji: '🍝' },
+      { name: 'eier', emoji: '🥚' },
+      { name: 'spaghetti', emoji: '🍝' },
+      { name: 'teigwaren', emoji: '🍝' },
+      { name: 'pfannkuchen', emoji: '🥞' },
+      { name: 'crêpe', emoji: '🥞' },
       // todo add more
     ];
 
-    var returnText = "Heute :🍽🍴\n";
+    let returnText = 'Heute :🍽🍴\n';
 
-    var day = json["days"][0];
+    const day = json.days[0];
 
-    for each (var counter in day.counters) {
-      returnText += "<b>" + counter.displayName + "</b>\n";
-      for each (var meal in counter['meals']) {
-        returnText += "• " + meal.name;
-        for each (var regularExpression in regularExpressions) {
-          if (meal.name.test(new Regex(regularExpression.name))) {
-            returnText += ' ' + regularExpression.emoji;
+    for (const counter of day.counters) {
+      returnText += `<b>${counter.displayName}</b>\n`;
+      for (const meal of counter.meals) {
+        returnText += `• ${meal.name}`;
+        for (const regularExpression of regularExpressions) {
+          if ((new RegExp(regularExpression.name)).test(meal.name)) {
+            returnText += ` ${regularExpression.emoji}`;
           }
         }
-        for each (var component in meal.component) {
-          returnText += "  ▪︎ " + component.name + "\n";
+        for (const component of meal.components) {
+          returnText += `  ▪︎ ${component.name}\n`;
         }
       }
     }
-    replyWithMarkdown(returnText);
-
+    replyWithHTML(returnText);
+  });
 });
 
 
