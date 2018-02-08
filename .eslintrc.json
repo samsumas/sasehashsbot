@@ -2,6 +2,7 @@
     "extends": "airbnb-base",
     "rules": {
         "no-plusplus": ["off"],
-        "max-len": ["off"]
+        "max-len": ["off"],
+        "indent": ["error", 4]
     }
 }
