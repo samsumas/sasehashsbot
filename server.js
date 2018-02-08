@@ -16,15 +16,14 @@ const cyberDuck = new Cyberduck(false);
 const dictionary = loadJsonFile.sync('./samisDictionary.json');
 const userDic = loadJsonFile.sync('./userDic.json');
 const smileys = loadJsonFile.sync('./smileys.json');
+const maxChars = 100;
+const paradise = []; // contains a lot of paradisiac things
 let lastQuote; // cache the results of '/getquote <string>'
 let wannaBuy;
 let lenny; // cache, contains the foodporn images for lenny
 let lennypage = 1; // contains the nth result page in lenny
 let lennypos = 1; // contains the nth result in lenny
-const paradise = []; // contains a lot of paradisiac things
-let webfail;
-let webfailcounter = 0;
-const maxChars = 100;
+let honhonhonpos = 1;
 
 // start the server. The server gets a request from github and then updates the local repo
 // http.createServer((req, res) => {
@@ -62,18 +61,18 @@ bot.catch((err) => {
 });
 
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
-bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => najax({ url: 'https://www.blague-drole.net/blagues/bonne-blagues-hasard.html', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('text-justify texte')[0].textContent)));
+
+bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
+    najax({ url: 'https://www.blague-drole.net/blagues/bonne-blagues-hasard.html', type: 'GET' }).success((res) => {
+        if (!new JSDOM(res).window.document.getElementsByClassName('text-justify texte')[honhonhonpos]) {
+            honhonhonpos = 0;
+        }
+        reply(new JSDOM(res).window.document.getElementsByClassName('text-justify texte')[honhonhonpos].textContent);
+    });
+    honhonhonpos++;
+});
 bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
-const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
-    if (link.search(/\.jpg$/)) {
-        replyWithPhoto(link);
-    } else {
-    // its a GIF!
-        replyWithVideo(link);
-    }
-    webfailcounter++;
-};
 bot.command(appendName(['getid']), (ctx) => {
     ctx.reply(`You are :${JSON.stringify(ctx.from)} from ${JSON.stringify(ctx.chat)}`);
 });
@@ -132,44 +131,6 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
     });
 });
 
-
-bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }) => {
-    if (webfail !== undefined && webfail.nextElementSibling !== undefined) {
-        const temp = webfail.nextElementSibling;
-        const link = temp.querySelector('div:nth-child(2) a img').src;
-        webfailHelper(link, replyWithPhoto, replyWithVideo);
-        webfailcounter++;
-    } else if (webfailcounter === 0) {
-        // loads first webpage
-    // downloads the page and put it in webfail
-        najax({
-            url: 'https://webfail.com/',
-            type: 'GET',
-            headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 OPR/47.0.2631.39' } }).success((site) => {
-            console.log(JSON.stringify(site));
-            console.log('afternajax');
-            webfail = new JSDOM(site).window.document.querySelector('#posts article:first-child');
-            webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
-            console.log('this looks ok');
-        }).error(err => console.log(JSON.stringify(err)));
-        console.log('aftererror');
-    } else {
-    // loads next webpage
-    // gets token to load the posts...but it isnt very beautiful i admit
-        const token = webfail.querySelector('script').textContent.replace(/.*tnxt = "/, '').replace('";', '');
-        najax({
-            url: `http://webfail.com/ajax-index/${token}`,
-            type: 'GET',
-            headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36 OPR/47.0.2631.39' } }).success((site) => {
-            // save new page in webfail
-            webfail = new JSDOM(site).window.document.body.firstChild;
-            // send new post
-            webfailHelper(webfail.querySelector('div:nth-child(2) a img').src, replyWithPhoto, replyWithVideo);
-        }).error(err => console.log(JSON.stringify(err)));
-        console.log('hier');
-    }
-});
-
 bot.command(appendName(['lennysdeath', 'lenny']), ({ replyWithPhoto }) => {
     // loads lenny if empty
     if (lenny && !lenny.data[lennypos]) {
@@ -187,7 +148,7 @@ bot.command(appendName(['lennysdeath', 'lenny']), ({ replyWithPhoto }) => {
             lennypos = 1;
             // reply with link, telegram will show the first photo of this link. Thanks Telegram.
             replyWithPhoto(lenny.data[lennypos].link);
-        });// .error(textStatus => console.log(`Fail! Didnt get JSON from API! Error is ${JSON.stringify(textStatus)}`));
+        });
     }
     if (lenny) {
         replyWithPhoto(lenny.data[lennypos].link); // reply with link, telegram will show the first photo of this link. Thanks Telegram.
@@ -451,7 +412,6 @@ bot.on('inline_query', async (ctx) => {
             }));
             ctx.answerInlineQuery(results);
         });
-    // .error(res => console.log(res));
 });
 
 bot.startPolling();
