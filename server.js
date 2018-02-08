@@ -79,6 +79,54 @@ bot.command(appendName(['getip']), ({ reply }) => {
   najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => reply(`http://[${r}]:${PORT}/`));
 });
 
+
+
+bot.command(appendName(['mensa']), ({ replyWithMarkdown }) => {
+  najax({ url: 'https://mensaar.de/api/1/${process.env.mensaarapikey}/1/de/getMenu/sb' }).success((res) => {
+    var json = JSON.parse(res);
+
+    const regularExpressions = [
+      { name: 'burger', emoji: '🍔' },
+      { name: 'pizza', emoji: '🍕'},
+      { name: 'apfel', emoji: '🍎'},
+      { name: 'reis', emoji: '🍚'},
+      { name: 'hähnchen', emoji: '🍗'},
+      { name: 'schwein', emoji: '🍖'},
+      { name: 'kartofel', emoji: '🥔'},
+      { name: 'salat', emoji: '🥗'},
+      { name: 'käse', emoji: '🧀'},
+      { name: 'nudel', emoji: '🍝'},
+      { name: 'eier', emoji: '🥚'},
+      { name: 'spaghetti', emoji: '🍝'},
+      { name: 'teigwaren', emoji: '🍝'},
+      { name: 'pfannkuchen', emoji: '🥞'},
+      { name: 'crêpe', emoji: '🥞'},
+      // todo add more
+    ];
+
+    var returnText = "Heute :🍽🍴\n";
+
+    var day = json["days"][0];
+
+    for each (var counter in day.counters) {
+      returnText += "<b>" + counter.displayName + "</b>\n";
+      for each (var meal in counter['meals']) {
+        returnText += "• " + meal.name;
+        for each (var regularExpression in regularExpressions) {
+          if (meal.name.test(new Regex(regularExpression.name))) {
+            returnText += ' ' + regularExpression.emoji;
+          }
+        }
+        for each (var component in meal.component) {
+          returnText += "  ▪︎ " + component.name + "\n";
+        }
+      }
+    }
+    replyWithMarkdown(returnText);
+
+});
+
+
 bot.command(appendName(['webfail', 'fail']), ({ replyWithPhoto, replyWithVideo }) => {
   if (webfail !== undefined && webfail.nextElementSibling !== undefined) {
     const temp = webfail.nextElementSibling;
@@ -385,4 +433,3 @@ bot.on('inline_query', async (ctx) => {
 });
 
 bot.startPolling();
-
