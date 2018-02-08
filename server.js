@@ -234,7 +234,11 @@ bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][
     if (wait < 0) {
         wait += 86400;
     }
-    ctx.reply(`Wecker klingelt in ${wait} Minuten`);
+    if (${wait} === 1) {
+        ctx.reply(`Wecker klingelt in einer Minute`);
+    } else {
+        ctx.reply(`Wecker klingelt in ${wait} Minuten`);
+    }
     setTimeout(() => { ctx.reply(`⏰ Klingel Klingel ${ctx.message.from.first_name}!`); }, wait * 60 * 1000);
 });
 
