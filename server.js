@@ -24,6 +24,7 @@ let lenny; // cache, contains the foodporn images for lenny
 let lennypage = 1; // contains the nth result page in lenny
 let lennypos = 1; // contains the nth result in lenny
 let honhonhonpos = 1;
+let honhonhoncache = [];
 
 // start the server. The server gets a request from github and then updates the local repo
 // http.createServer((req, res) => {
@@ -63,14 +64,19 @@ bot.catch((err) => {
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
 bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
-    najax({ url: 'https://www.blague-drole.net/blagues/bonne-blagues-hasard.html', type: 'GET' }).success((res) => {
-        if (!new JSDOM(res).window.document.getElementsByClassName('text-justify texte')[honhonhonpos]) {
+    if (!honhonhoncache || !honhonhoncache[honhonhonpos]) {
+        honhonhonpos = 0;
+        najax({ url: 'https://www.blague-drole.net/blagues/bonne-blagues-hasard.html', type: 'GET' }).success((res) => {
+            honhonhoncache = new JSDOM(res).window.document.getElementsByClassName('text-justify texte');
             honhonhonpos = 0;
-        }
-        reply(new JSDOM(res).window.document.getElementsByClassName('text-justify texte')[honhonhonpos].textContent);
-    });
-    honhonhonpos++;
+        }).then(() => {
+            reply(honhonhoncache[honhonhonpos++].textContent)
+        });
+    } else {
+        reply(honhonhoncache[honhonhonpos++].textContent);
+    }
 });
+
 bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
 bot.command(appendName(['getid']), (ctx) => {
