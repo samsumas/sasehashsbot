@@ -15,6 +15,7 @@ require('dotenv').config(); // for apikeys
 const cyberDuck = new Cyberduck(false);
 const dictionary = loadJsonFile.sync('./samisDictionary.json');
 const userDic = loadJsonFile.sync('./userDic.json');
+const smileys = loadJsonFile.sync('./smileys.json');
 let lastQuote; // cache the results of '/getquote <string>'
 let wannaBuy;
 let lenny; // cache, contains the foodporn images for lenny
@@ -84,39 +85,15 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
     najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
         const json = JSON.parse(res);
 
-        const regularExpressions = [
-            { name: 'burger', emoji: '❤️🍔❤️' },
-            { name: 'pizza', emoji: '🍕' },
-            { name: 'apfel', emoji: '🍎' },
-            { name: 'reis', emoji: '🍚' },
-            { name: 'hähnchen', emoji: '🍗' },
-            { name: 'schwein', emoji: '🍖' },
-            { name: 'kartofel', emoji: '🥔' },
-            { name: 'salat', emoji: '🥗' },
-            { name: 'käse', emoji: '🧀' },
-            { name: 'nudel', emoji: '🍝' },
-            { name: 'pommes', emoji: '🍟' },
-            { name: 'gyros', emoji: '🥙' },
-            { name: 'pilz', emoji: '🍄' },
-            { name: 'mais', emoji: '🌽' },
-            { name: 'eier', emoji: '🥚' },
-            { name: 'tomate', emoji: '🍅' },
-            { name: 'spaghetti', emoji: '🍝' },
-            { name: 'teigwaren', emoji: '🍝' },
-            { name: 'pfannkuchen', emoji: '🥞' },
-            { name: 'crêpe', emoji: '🥞' },
-            // todo add more
-        ];
-
         let returnText = 'Heute :🍽🍴\n';
 
         const day = json.days[0];
 
         _.each(day.counters, (counter) => {
             if (/Komplettmenü/.test(counter.displayName)) {
-                returnText += '🅰️\n';
+                returnText += '🅰️<b>Menü</b>\n';
             } else if (/Vegetarisches Menü/.test(counter.displayName)) {
-                returnText += '🅱️\n';
+                returnText += '🅱️<b>Menü</b>\n';
             } else if (/Free Flow/.test(counter.displayName)) {
                 returnText += '<b>Freier Fluss</b>\n';
             } else if (/Mensacafé/.test(counter.displayName)) {
@@ -128,20 +105,20 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
                 if (/Salatbuffet/.test(meal.name)) {
                     return;
                 }
-                returnText += `+ ${meal.name}`;
-                _.each(regularExpressions, (regularExpression) => {
-                    const reg = new RegExp(`${regularExpression.name}`, 'i');
+                returnText += `◾️ ${meal.name}`;
+                _.each(smileys, (smiley) => {
+                    const reg = new RegExp(`${smiley.name}`, 'i');
                     if (reg.test(meal.name)) {
-                        returnText += ` ${regularExpression.emoji}`;
+                        returnText += ` ${smiley.emoji}`;
                     }
                 });
                 returnText += '\n';
                 _.each(meal.components, (component) => {
-                    returnText += `  ▪︎ ${component.name}`;
-                    _.each(regularExpressions, (regularExpression) => {
-                        const reg = new RegExp(`${regularExpression.name}`, 'i');
+                    returnText += `        ▪︎ ${component.name}`;
+                    _.each(smileys, (smiley) => {
+                        const reg = new RegExp(`${smiley.name}`, 'i');
                         if (reg.test(component.name)) {
-                            returnText += ` ${regularExpression.emoji}`;
+                            returnText += ` ${smiley.emoji}`;
                         }
                     });
                     returnText += '\n';
