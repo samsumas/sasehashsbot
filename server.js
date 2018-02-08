@@ -61,7 +61,7 @@ bot.catch((err) => {
     console.log('Catched following error :', err);
 });
 
-bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://www.jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
+bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
 const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
     if (link.search(/\.jpg$/)) {
