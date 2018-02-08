@@ -61,8 +61,8 @@ bot.catch((err) => {
     console.log('Catched following error :', err);
 });
 
-bot.command(appendName(['witz']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
-
+bot.command(appendName(['witz, kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
+bot.command(appendName(['honhonhon, blague']), ({ reply }) => najax({ url: 'https://www.blague-drole.net/blagues/bonne-blagues-hasard.html', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('text-justify texte')[0].textContent)));
 bot.command(appendName(['lol']), ({ reply }) => najax({ url: 'http://jokes-best.com/random-jokes.php', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
 const webfailHelper = (link, replyWithPhoto, replyWithVideo) => {
