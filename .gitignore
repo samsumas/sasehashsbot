@@ -1,2 +1,6 @@
-*.json
+def.json
+package.json
+package-lock.json
+samisDictionary.json
+userDic.json
 .env
