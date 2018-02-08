@@ -249,13 +249,25 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
     }
 });
 
+bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9])`), (ctx) => {
+    const time = parseInt(ctx.match[3] * 60, 10) + parseInt(ctx.match[4], 10);
+    const today = new Date();
+    let wait = time - (today.getHours() * 60) - today.getMinutes();
+    if (wait < 0) {
+        wait += 86400;
+    }
+    ctx.reply(`Wecker klingelt in ${wait} Minuten`);
+    setTimeout(() => { ctx.reply(`⏰ Klingel Klingel ${ctx.message.from.first_name}!`); }, wait * 60 * 1000);
+});
+
+
 bot.hears(new RegExp(`^/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`), (ctx) => {
     let time;
     if (ctx.match[3] > 70000) {
         ctx.reply('This is too much for me, try with less time (expressed in minutes)');
         return;
     }
-    if (ctx.match[3] == 0) {
+    if (ctx.match[3]) {
         time = 3;
     } else {
         time = ctx.match[3];
