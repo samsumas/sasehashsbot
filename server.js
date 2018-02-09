@@ -196,7 +196,7 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
     }
 });
 
-bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9])`, 'i'), (ctx) => {
+bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9]) (.*)`, 'i'), (ctx) => {
     const time = parseInt(ctx.match[3] * 60, 10) + parseInt(ctx.match[4], 10);
     const today = new Date();
     let wait = time - (today.getHours() * 60) - today.getMinutes();
@@ -208,7 +208,7 @@ bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][
     } else {
         ctx.reply(`${ctx.message.from.first_name}s Wecker klingelt in ${wait} Minuten`);
     }
-    setTimeout(() => { ctx.reply(`⏰⏰⏰${ctx.message.from.first_name}s Wecker klingelt!⏰⏰⏰`); }, wait * 60 * 1000);
+    setTimeout(() => { ctx.reply(`${ctx.message.from.first_name}s Wecker ${ctx.match[5]} klingelt!`); }, wait * 60 * 1000);
 });
 
 
