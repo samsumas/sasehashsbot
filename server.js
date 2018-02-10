@@ -211,7 +211,6 @@ bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][
     setTimeout(() => { ctx.reply(`${ctx.message.from.first_name}s Wecker ${ctx.match[5]} klingelt!`); }, wait * 60 * 1000);
 });
 
-
 bot.hears(new RegExp(`^/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`, 'i'), (ctx) => {
     let time;
     if (ctx.match[3] > 70000) {
