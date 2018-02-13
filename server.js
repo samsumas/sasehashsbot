@@ -19,9 +19,6 @@ const maxChars = 100;
 const paradise = []; // contains a lot of paradisiac things
 let lastQuote; // cache the results of '/getquote <string>'
 let wannaBuy;
-let lenny; // cache, contains the foodporn images for lenny
-let lennypage = 1; // contains the nth result page in lenny
-let lennypos = 1; // contains the nth result in lenny
 let honhonhonpos = 1;
 let honhonhoncache = [];
 
@@ -109,31 +106,6 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
     });
 });
 
-bot.command(appendName(['lennysdeath', 'lenny']), ({ replyWithPhoto }) => {
-    // loads lenny if empty
-    if (lenny && !lenny.data[lennypos]) {
-    // load next page
-        lenny = '';
-        lennypage++;
-    }
-    if (lenny === undefined) {
-        najax({ url: `https://api.imgur.com/3/gallery/search/viral//${lennypage}?q=foodporn`,
-            type: 'GET',
-            headers: { authorization: `Client-ID ${process.env.APIKEY_IMGUR}` },
-        }).success((res) => {
-            // parse the json obtained from imgur api and put it in lenny
-            lenny = JSON.parse(res);
-            lennypos = 1;
-            // reply with link, telegram will show the first photo of this link. Thanks Telegram.
-            replyWithPhoto(lenny.data[lennypos].link);
-        });
-    }
-    if (lenny) {
-        replyWithPhoto(lenny.data[lennypos].link); // reply with link, telegram will show the first photo of this link. Thanks Telegram.
-    }
-    lennypos++;
-});
-
 bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
     if (wannaBuy) {
         wannaBuy = wannaBuy.nextElementSibling;
@@ -174,7 +146,7 @@ bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][
     const todayMin = (today.getHours() * 60) + today.getMinutes();
     let wait = time - todayMin;
     if (time < todayMin) {
-        wait = 1440 - todayMin + time;
+        wait = (1440 + time) - todayMin;
     }
     if (wait === 1) {
         ctx.reply(`${ctx.message.from.first_name}s Wecker klingelt in einer Minute`);
@@ -255,34 +227,41 @@ bot.command(appendName(['nextquote']), ({ reply }) => {
 });
 
 bot.command(appendName(['doctor', 'help', 'cyberDuck']), ({ reply }) => reply(cyberDuck.getInitial()));
+
 bot.hears(new RegExp(`^/r(@${process.env.BOT_NAME})? (.*)`, 'i'), ({ match, reply }) => reply(cyberDuck.transform(match[2])));
 
 // sends the images
-const imgurAlbumHelper = (curr, replyWithVideo, replyWithPhoto, reply) => {
+const imgurAlbumHelper = (curr, ctx) => {
     // is album?
     if (curr === undefined) {
-        reply('Nothing found!');
+        ctx.reply('Nothing found!');
         return;
     }
     if (curr.is_album) {
         _.each(curr.images, (e) => {
-            if (e.animated) { _.delay(replyWithVideo, 500, e.mp4); } else { _.delay(replyWithPhoto, 500, e.link); }
+            if (e.animated) { _.delay(ctx.replyWithVideo, 500, e.mp4); } else { _.delay(ctx.replyWithPhoto, 500, e.link); }
         });
-    } else if (curr.animated) { replyWithVideo(curr.mp4); } else { replyWithPhoto(curr.link); }
+    } else if (curr.animated) { ctx.replyWithVideo(curr.mp4); } else { ctx.replyWithPhoto(curr.link); }
 };
 
 // paradise[query] contains 3 fields :
 // pos (which image are we on)
 // page (actual page number)
 // json (api output)
-bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn][Nn][Yy].*)`, 'i'), ({ match, replyWithVideo, replyWithPhoto, reply }) => {
-    let query;
-    if (match[2] === undefined) { query = 'foodporn'; } else { query = match[2].toLowerCase(); }
+const paradiseHelper = (q, ctx) => {
+    let query = q;
+    if (query === undefined) {
+        query = 'burger';
+    }
+    query = query.toLowerCase();
+    const reply = ctx.reply;
+    const replyWithPhoto = ctx.replyWithPhoto;
+    const replyWithVideo = ctx.replyWithVideo;
     const sort = 'top';
     if (paradise[query]) {
         const curr = paradise[query];
         if (curr.json.data[curr.pos].link) {
-            imgurAlbumHelper(paradise[query].json.data[curr.pos], replyWithVideo, replyWithPhoto, reply); // send photos
+            imgurAlbumHelper(paradise[query].json.data[curr.pos], ctx); // send photos
             paradise[query].pos++;
         } else {
             // download next page
@@ -293,7 +272,7 @@ bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn]
             }).success((res) => {
                 paradise[query].pos = 1;
                 paradise[query].json = res;
-                imgurAlbumHelper(paradise[query].json.data[0], replyWithVideo, replyWithPhoto, reply); // send photos
+                imgurAlbumHelper(paradise[query].json.data[0], ctx); // send photos
             }).error(reply('Nothing found :/'));
         }
     } else {
@@ -303,10 +282,17 @@ bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn]
             headers: { authorization: `Client-ID ${process.env.APIKEY_IMGUR}` },
         }).success((res) => {
             paradise[query] = { json: JSON.parse(res), pos: 1, page: 0 }; // add new entry
-            imgurAlbumHelper(paradise[query].json.data[0], replyWithVideo, replyWithPhoto, reply); // output the images
+            imgurAlbumHelper(paradise[query].json.data[0], ctx); // output the images
         });
     }
-});
+};
+
+// paradise[query] contains 3 fields :
+// pos (which image are we on)
+// page (actual page number)
+// json (api output)
+bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)`, 'i'), ctx => paradiseHelper(ctx.match[2], ctx));
+bot.command(appendName(['lennysdeath']), ctx => paradiseHelper("burger", ctx));
 
 
 bot.hears(new RegExp(`correct(@${process.env.BOT_NAME})? ([^ ]+) => (.*)`, 'i'), ({ match, replyWithMarkdown }) => {
