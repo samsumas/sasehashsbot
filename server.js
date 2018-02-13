@@ -4,7 +4,6 @@ const loadJsonFile = require('load-json-file');
 const { JSDOM } = require('jsdom');
 const _ = require('underscore');
 const fs = require('fs');
-// const Cyberduck = require('./cyberduck/cyberduckbot.js');
 const Cyberduck = require('./nodeCyberduck.js');
 // const childProcess = require('child_process');
 // const http = require('http');
@@ -217,7 +216,7 @@ bot.hears(new RegExp(`^/(tea|tee|timer)(@${process.env.BOT_NAME})? ([0-9]*)`, 'i
         ctx.reply('This is too much for me, try with less time (expressed in minutes)');
         return;
     }
-    if (ctx.match[3]) {
+    if (!ctx.match[3]) {
         time = 3;
     } else {
         time = ctx.match[3];
