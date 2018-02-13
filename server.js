@@ -17,6 +17,7 @@ const userDic = loadJsonFile.sync('./userDic.json');
 const smileys = loadJsonFile.sync('./smileys.json');
 const maxChars = 100;
 const paradise = []; // contains a lot of paradisiac things
+const googleCache = [];
 let lastQuote; // cache the results of '/getquote <string>'
 let wannaBuy;
 let honhonhonpos = 1;
@@ -104,6 +105,43 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
         });
         replyWithHTML(returnText);
     });
+});
+
+const cleanImageLink = (link) => {
+    //TODO
+}
+
+const googleAPICall = (q, start, callback) => {
+    najax({
+        url: `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=${process.env.GOOGLE_CSE}&q=${q}&prettyPrint=false&searchType=image&start=${start}`,
+        type: 'GET',
+    }).success(callback).error( err => { throw JSON.stringify(err) });
+};
+const googleImageSearch = (q, ctx) => {
+    if (!googleCache[q]) {
+        googleAPICall(q, 1, (res) => {
+            googleCache[q] = { json: JSON.parse(res), pos: 0, start: 1 };
+            ctx.replyWithPhoto(googleCache[q].json.items[googleCache[q].pos++].link);
+        });
+    } else {
+        const currPos = ++googleCache[q].pos;
+        const val = googleCache[q].json.items[currPos];
+        if (!val) {
+            // loads next page
+            googleCache[q].start = currPos + 1;
+            googleCache[q].pos = 0;
+            googleAPICall(q, googleCache[q].start, (res) => {
+                googleCache[q].json = JSON.parse(res);
+                ctx.replyWithPhoto(googleCache[q].json.items[googleCache[q].pos].link);
+            });
+        } else {
+            ctx.replyWithPhoto(val.link);
+        }
+    }
+};
+
+bot.hears(new RegExp(`^/google(@${process.env.BOT_NAME})? (.*)`, 'i'), (ctx) => {
+    if (ctx.match[2]) googleImageSearch(ctx.match[2], ctx);
 });
 
 bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
@@ -255,8 +293,6 @@ const paradiseHelper = (q, ctx) => {
     }
     query = query.toLowerCase();
     const reply = ctx.reply;
-    const replyWithPhoto = ctx.replyWithPhoto;
-    const replyWithVideo = ctx.replyWithVideo;
     const sort = 'top';
     if (paradise[query]) {
         const curr = paradise[query];
@@ -292,7 +328,7 @@ const paradiseHelper = (q, ctx) => {
 // page (actual page number)
 // json (api output)
 bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)`, 'i'), ctx => paradiseHelper(ctx.match[2], ctx));
-bot.command(appendName(['lennysdeath']), ctx => paradiseHelper("burger", ctx));
+bot.command(appendName(['lennysdeath']), ctx => paradiseHelper('burger', ctx));
 
 
 bot.hears(new RegExp(`correct(@${process.env.BOT_NAME})? ([^ ]+) => (.*)`, 'i'), ({ match, replyWithMarkdown }) => {
