@@ -11,7 +11,7 @@
     "jsdom": "^11.6.2",
     "load-json-file": "^2.0.0",
     "najax": "^1.0.3",
-    "telegraf": "^3.17.6",
+    "telegraf": "^3.17.8",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

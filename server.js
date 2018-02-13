@@ -25,29 +25,6 @@ let lennypos = 1; // contains the nth result in lenny
 let honhonhonpos = 1;
 let honhonhoncache = [];
 
-// start the server. The server gets a request from github and then updates the local repo
-// http.createServer((req, res) => {
-//  switch (req.url) {
-//    case '/push' :
-//      childProcess.exec('git pull | grep "Already up-to-date."', (error) => {
-//        if (error) {
-//        // not so beautiful way to restart this script
-//          throw 'Rebooting after update...';
-//        }
-//      });
-//      res.write('Repo not updated');
-//      break;
-//    case '/test' :
-//      res.write('This is a test');
-//      break;
-//    default:
-//      res.write('404 not found');
-//      break;
-//  }
-//  res.end();
-// }).listen(PORT);
-
-
 const invalidSize = str => str.length > maxChars;
 
 const appendName = arr =>
@@ -55,10 +32,6 @@ const appendName = arr =>
     _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));
 
 const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
-
-bot.catch((err) => {
-    console.log('Catched following error :', err);
-});
 
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
@@ -314,7 +287,7 @@ bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn]
         } else {
             // download next page
             paradise[query].page++;
-            najax({ url: `https://api.imgur.com/3/gallery/search/${sort}/all/${paradise[query].page}?q=${query}`,
+            najax({ url: `https://api.imgur.com/3/gallery/search/${sort}/month/${paradise[query].page}?q=${query}`,
                 type: 'GET',
                 headers: { authorization: `Client-ID ${process.env.APIKEY_IMGUR}` },
             }).success((res) => {
@@ -325,7 +298,7 @@ bot.hears(new RegExp(`/((.+)paradise(@${process.env.BOT_NAME})?)|(.*[Ll][Ee][Nn]
         }
     } else {
     // download json from api
-        najax({ url: `https://api.imgur.com/3/gallery/search/${sort}/all/0?q=${query}`,
+        najax({ url: `https://api.imgur.com/3/gallery/search/${sort}/month/0?q=${query}`,
             type: 'GET',
             headers: { authorization: `Client-ID ${process.env.APIKEY_IMGUR}` },
         }).success((res) => {
