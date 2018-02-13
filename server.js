@@ -195,10 +195,13 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
     }
 });
 
-bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9]) (.*)`, 'i'), (ctx) => {
+bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9]) ?(.*)`, 'i'), (ctx) => {
     const time = parseInt(ctx.match[3] * 60, 10) + parseInt(ctx.match[4], 10);
     const today = new Date();
     let wait = time - (today.getHours() * 60) - today.getMinutes();
+    if (parseInt(ctx.match[3], 10) < today.getHours()) {
+        wait = 24*60 - (today.getHours() * 60) + today.getMinutes()) + (today.getHours() * 60 - today.getMinutes());
+    }
     if (wait < 0) {
         wait += 86400;
     }
