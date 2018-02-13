@@ -107,15 +107,15 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
     });
 });
 
-const cleanImageLink = (link) => {
-    //TODO
-}
+// const cleanImageLink = (link) => {
+// TODO
+// };
 
 const googleAPICall = (q, start, callback) => {
     najax({
         url: `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API}&cx=${process.env.GOOGLE_CSE}&q=${q}&prettyPrint=false&searchType=image&start=${start}`,
         type: 'GET',
-    }).success(callback).error( err => { throw JSON.stringify(err) });
+    }).success(callback).error((err) => { throw JSON.stringify(err); });
 };
 const googleImageSearch = (q, ctx) => {
     if (!googleCache[q]) {
@@ -140,8 +140,8 @@ const googleImageSearch = (q, ctx) => {
     }
 };
 
-bot.hears(new RegExp(`^/google(@${process.env.BOT_NAME})? (.*)`, 'i'), (ctx) => {
-    if (ctx.match[2]) googleImageSearch(ctx.match[2], ctx);
+bot.hears(new RegExp(`^/((google)|(image))(@${process.env.BOT_NAME})? (.*)`, 'i'), (ctx) => {
+    if (ctx.match[5]) googleImageSearch(ctx.match[5], ctx);
 });
 
 bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
