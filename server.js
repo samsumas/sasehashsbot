@@ -35,6 +35,7 @@ const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
 bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout, stderr) => reply(stdout)));
+bot.command(appendName(['fortune', 'cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 
 bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
     if (!honhonhoncache || !honhonhoncache[honhonhonpos]) {
@@ -109,10 +110,6 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
         replyWithHTML(returnText);
     });
 });
-
-// const cleanImageLink = (link) => {
-// TODO
-// };
 
 const googleAPICall = (q, start, callback) => {
     najax({
