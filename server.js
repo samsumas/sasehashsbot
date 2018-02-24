@@ -2,6 +2,7 @@ const Telegraf = require('telegraf');
 const najax = require('najax');
 const loadJsonFile = require('load-json-file');
 const { JSDOM } = require('jsdom');
+const child_process = require('child_process');
 const _ = require('underscore');
 const fs = require('fs');
 const Cyberduck = require('./nodeCyberduck.js');
@@ -32,6 +33,8 @@ const appendName = arr =>
 const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
 
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
+
+bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout, stderr) => reply(stdout)));
 
 bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
     if (!honhonhoncache || !honhonhoncache[honhonhonpos]) {
