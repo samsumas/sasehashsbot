@@ -6,7 +6,7 @@ $ npm install
 $ vim .env # or an other text editor
 ```
 
-## Exemple .env file
+## Example .env file
 
 ```
 APIKEY_TELEGRAM=345678:gkfdhsnoxiwuikd
