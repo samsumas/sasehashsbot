@@ -35,7 +35,8 @@ const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
 bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout, stderr) => reply(stdout)));
-bot.command(appendName(['fortune', 'cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
+bot.command(appendName(['cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
+bot.command(appendName(['fortune']), ({ replyWithMarkdown }) => child_process.exec('fortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 
 bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
     if (!honhonhoncache || !honhonhoncache[honhonhonpos]) {
@@ -58,7 +59,7 @@ bot.command(appendName(['getid']), (ctx) => {
 });
 
 bot.command(appendName(['getip']), ({ reply }) => {
-    najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => reply(`http://[${r}]:${PORT}/`));
+    najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => reply(`http://[${r}]/nextcloud`));
 });
 bot.command(appendName(['start']), ({ reply }) => reply('Sasehashs fantastical Bot. Look me up on Github (https://github.com/samsumas/Funny-TelegramBot).\n\n btw it uses Arch ❤️'));
 
@@ -178,7 +179,8 @@ bot.command(appendName(['wannabuy', 'buy']), ({ replyWithPhoto, reply }) => {
     }
 });
 
-bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2][0-9]):([0-5][0-9]) ?(.*)`, 'i'), (ctx) => {
+
+bot.hears(new RegExp(`^/(wecker)(@${process.env.BOT_NAME})? ([0-2]?[0-9]):([0-5][0-9]) ?(.*)`, 'i'), (ctx) => {
     const time = parseInt(ctx.match[3] * 60, 10) + parseInt(ctx.match[4], 10);
     const today = new Date();
     const todayMin = (today.getHours() * 60) + today.getMinutes();
