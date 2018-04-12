@@ -9,7 +9,6 @@ const Cyberduck = require('./nodeCyberduck.js');
 // const childProcess = require('child_process');
 // const http = require('http');
 
-const PORT = 8080;
 require('dotenv').config(); // for apikeys
 
 const cyberDuck = new Cyberduck(false);
@@ -27,7 +26,6 @@ let honhonhoncache = [];
 const invalidSize = str => str.length > maxChars;
 
 
-
 const appendName = arr =>
     // transform ['test','b'] in ['test','test@botname','b','b@botname']
     _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));
@@ -36,11 +34,11 @@ const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
 
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
-const isAdmin = (ctx) => ctx.from.id === process.env.ADMIN;
-bot.command(appendName(['restart'], (ctx) => {if (isAdmin(ctx)) throw "Restart"}));
-bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout, stderr) => reply(stdout)));
-bot.command(appendName(['cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
-bot.command(appendName(['fortune']), ({ replyWithMarkdown }) => child_process.exec('fortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
+const isAdmin = ctx => ctx.from.id === process.env.ADMIN;
+bot.command(appendName(['restart']), (ctx) => { if (isAdmin(ctx)) throw 'Restart'; });
+bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout) => reply(stdout)));
+bot.command(appendName(['cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
+bot.command(appendName(['fortune']), ({ replyWithMarkdown }) => child_process.exec('fortune', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 
 bot.command(appendName(['honhonhon', 'blague']), ({ reply }) => {
     if (!honhonhoncache || !honhonhoncache[honhonhonpos]) {
