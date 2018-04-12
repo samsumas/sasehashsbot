@@ -26,6 +26,8 @@ let honhonhoncache = [];
 
 const invalidSize = str => str.length > maxChars;
 
+
+
 const appendName = arr =>
     // transform ['test','b'] in ['test','test@botname','b','b@botname']
     _.flatten(_.map(arr, o => [o, `${o}@${process.env.BOT_NAME}`]));
@@ -34,6 +36,8 @@ const bot = new Telegraf(process.env.APIKEY_TELEGRAM);
 
 bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://witze.net/zuf%c3%a4llige-witze', type: 'GET' }).success(res => reply(new JSDOM(res).window.document.getElementsByClassName('joke')[0].textContent)));
 
+const isAdmin = (ctx) => ctx.from.id === process.env.ADMIN;
+bot.command(appendName(['restart'], (ctx) => if (isAdmin(ctx)) throw "Restart"));
 bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout, stderr) => reply(stdout)));
 bot.command(appendName(['cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 bot.command(appendName(['fortune']), ({ replyWithMarkdown }) => child_process.exec('fortune', (err, stdout, stderr) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
@@ -58,8 +62,9 @@ bot.command(appendName(['getid']), (ctx) => {
     ctx.reply(`You are :${JSON.stringify(ctx.from)} from ${JSON.stringify(ctx.chat)}`);
 });
 
-bot.command(appendName(['getip']), ({ reply }) => {
-    najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => reply(`http://[${r}]/nextcloud`));
+bot.command(appendName(['getip']), (ctx) => {
+    if (!isAdmin(ctx)) { return; }
+    najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => ctx.reply(`http://[${r}]/nextcloud`));
 });
 bot.command(appendName(['start']), ({ reply }) => reply('Sasehashs fantastical Bot. Look me up on Github (https://github.com/samsumas/Funny-TelegramBot).\n\n btw it uses Arch ❤️'));
 
