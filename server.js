@@ -36,8 +36,13 @@ bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://
 
 const isAdmin = ctx => ctx.from.id == process.env.ADMIN;
 
-bot.command(appendName(['restart']), (ctx) => { if (isAdmin(ctx)) throw 'Restart'; });
-bot.command(appendName(['uptime', 'up']), ({ reply }) => child_process.exec('uptime', (err, stdout) => reply(stdout)));
+bot.command(appendName(['restart']), (ctx) => {
+	if (isAdmin(ctx)) {
+		ctx.reply('Restarting bot...');
+		throw 'Restart';
+	}
+});
+bot.command(appendName(['uptime', 'up']), ({ replyWithMarkdown }) => child_process.exec('uptime', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 bot.command(appendName(['cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 bot.command(appendName(['fortune']), ({ replyWithMarkdown }) => child_process.exec('fortune', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 
@@ -63,7 +68,7 @@ bot.command(appendName(['getid']), (ctx) => {
 
 bot.command(appendName(['getip']), (ctx) => {
     if (!isAdmin(ctx)) { return; }
-    najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => ctx.reply(`http://[${r}]/nextcloud`));
+    najax({ url: 'http://ipv6bot.whatismyipaddress.com/' }).success(r => ctx.replyWithMarkdown(`\`\`\`${r}\`\`\``));
 });
 bot.command(appendName(['start']), ({ reply }) => reply('Sasehashs fantastical Bot. Look me up on Github (https://github.com/samsumas/Funny-TelegramBot).\n\n btw it uses Arch ❤️'));
 
