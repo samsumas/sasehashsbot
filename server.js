@@ -104,7 +104,7 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
                         returnText += ` ${smiley.emoji}`;
                     }
                 });
-                returnText += '\n';
+                returnText += `(${counter.prices.s}€)\n`;
                 _.each(meal.components, (component) => {
                     returnText += `        ▪︎ ${component.name}`;
                     _.each(smileys, (smiley) => {
