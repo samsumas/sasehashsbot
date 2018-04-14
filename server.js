@@ -76,7 +76,7 @@ const myDots = {
     "komplett" : '🅰️  ',
     "vegetarisch" : '🅱️  ',
     "mensacafe" : '☕️  ',
-    "mensacafe-abend" : '🌇  ',
+    "mensacafe-abend" : '🧛  ',
     "freeflow" : '🆓  ',
 }
 
@@ -98,12 +98,13 @@ const addSmiley = (mealName) => {
     return returnText;
 }
 
+const todayOrMorrow = [ 'Heute', 'Morgen' ];
 
 const mensa = (index) => ({ replyWithHTML }) => {
     najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
         const json = JSON.parse(res);
 
-        let returnText = 'Heute :🍽🍴\n';
+        let returnText = `<b>${todayOrMorrow[index]}</b> :🍽🍴\n`;
 
         const day = json.days[index];
 
