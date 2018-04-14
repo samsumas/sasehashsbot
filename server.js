@@ -99,28 +99,15 @@ const addSmiley = (mealName) => {
 }
 
 
-
-
-bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
+const mensa = (index) => ({ replyWithHTML }) => {
     najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
         const json = JSON.parse(res);
 
         let returnText = 'Heute :🍽🍴\n';
 
-        const day = json.days[0];
+        const day = json.days[index];
 
         _.each(day.counters, (counter) => {
-          //if (/Komplettmenü/.test(counter.displayName)) {
-          //    returnText += '🅰️<b>Menü</b>\n';
-          //} else if (/Vegetarisches Menü/.test(counter.displayName)) {
-          //    returnText += '🅱️<b>Menü</b>\n';
-          //} else if (/Free Flow/.test(counter.displayName)) {
-          //    returnText += '<b>Freier Fluss</b>\n';
-          //} else if (/Mensacafé/.test(counter.displayName)) {
-          //    returnText += `<b>${counter.displayName}☕️</b>\n`;
-          //} else {
-          //    returnText += `<b>${counter.displayName}</b>\n`;
-          //}
             _.each(counter.meals, (meal) => {
                 if (/Salatbuffet/.test(meal.name)) { return; }
 
@@ -149,7 +136,13 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
         });
         replyWithHTML(returnText);
     });
-});
+}
+
+
+
+bot.command(appendName(['mensa']), mensa(0));
+bot.command(appendName(['mensaTommorow']), mensa(1));
+
 
 const googleAPICall = (q, start, callback) => {
     najax({
