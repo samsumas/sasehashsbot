@@ -142,7 +142,7 @@ const mensa = (index) => ({ replyWithHTML }) => {
 
 
 bot.command(appendName(['mensa']), mensa(0));
-bot.command(appendName(['mensaTommorow']), mensa(1));
+bot.command(appendName(['mensaTomorrow']), mensa(1));
 
 
 const googleAPICall = (q, start, callback) => {
