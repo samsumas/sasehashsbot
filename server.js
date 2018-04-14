@@ -97,7 +97,11 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
                 if (/Salatbuffet/.test(meal.name)) {
                     return;
                 }
-                returnText += `◾️ ${meal.name}`;
+                returnText += '◾️ '
+                if (meal.category) {
+                    returnText += `<b>${meal.category}</b> : `;
+                }
+                returnText += `${meal.name}`;
                 _.each(smileys, (smiley) => {
                     const reg = new RegExp(`${smiley.name}`, 'i');
                     if (reg.test(meal.name)) {
