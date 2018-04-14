@@ -72,6 +72,34 @@ bot.command(appendName(['getip']), (ctx) => {
 });
 bot.command(appendName(['start']), ({ reply }) => reply('Sasehashs fantastical Bot. Look me up on Github (https://github.com/samsumas/Funny-TelegramBot).\n\n btw it uses Arch ❤️'));
 
+const myDots = { 
+    "komplett" : '🅰️  ',
+    "vegetarisch" : '🅱️  ',
+    "mensacafe" : '☕️  ',
+    "mensacafe-abend" : '🌇  ',
+    "freeflow" : '🆓  ',
+}
+
+const addDots = (str) => {
+    try {
+        return myDots[str];
+    } catch (err) {
+        return '◾️ ';
+    }
+}
+const addSmiley = (mealName) => {
+    returnText = ""
+    _.each(smileys, (smiley) => {
+        const reg = new RegExp(`${smiley.name}`, 'i');
+        if (reg.test(mealName)) {
+            returnText += ` ${smiley.emoji}`;
+        }
+    });
+    return returnText;
+}
+
+
+
 
 bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
     najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
@@ -82,44 +110,39 @@ bot.command(appendName(['mensa']), ({ replyWithHTML }) => {
         const day = json.days[0];
 
         _.each(day.counters, (counter) => {
-            if (/Komplettmenü/.test(counter.displayName)) {
-                returnText += '🅰️<b>Menü</b>\n';
-            } else if (/Vegetarisches Menü/.test(counter.displayName)) {
-                returnText += '🅱️<b>Menü</b>\n';
-            } else if (/Free Flow/.test(counter.displayName)) {
-                returnText += '<b>Freier Fluss</b>\n';
-            } else if (/Mensacafé/.test(counter.displayName)) {
-                returnText += `<b>${counter.displayName}☕️</b>\n`;
-            } else {
-                returnText += `<b>${counter.displayName}</b>\n`;
-            }
+          //if (/Komplettmenü/.test(counter.displayName)) {
+          //    returnText += '🅰️<b>Menü</b>\n';
+          //} else if (/Vegetarisches Menü/.test(counter.displayName)) {
+          //    returnText += '🅱️<b>Menü</b>\n';
+          //} else if (/Free Flow/.test(counter.displayName)) {
+          //    returnText += '<b>Freier Fluss</b>\n';
+          //} else if (/Mensacafé/.test(counter.displayName)) {
+          //    returnText += `<b>${counter.displayName}☕️</b>\n`;
+          //} else {
+          //    returnText += `<b>${counter.displayName}</b>\n`;
+          //}
             _.each(counter.meals, (meal) => {
-                if (/Salatbuffet/.test(meal.name)) {
-                    return;
-                }
-                returnText += '◾️ '
+                if (/Salatbuffet/.test(meal.name)) { return; }
+
+                returnText += addDots(counter.id);
+
                 if (meal.category) {
                     returnText += `<b>${meal.category}</b> : `;
                 }
+
                 returnText += `${meal.name}`;
-                _.each(smileys, (smiley) => {
-                    const reg = new RegExp(`${smiley.name}`, 'i');
-                    if (reg.test(meal.name)) {
-                        returnText += ` ${smiley.emoji}`;
-                    }
-                });
+
+                returnText += addSmiley(meal.name);
+
                 if (meal.prices) {
                     returnText += `  (${meal.prices.s}€)`
                 }
+
                 returnText += '\n';
+
                 _.each(meal.components, (component) => {
-                    returnText += `        ▪︎ ${component.name}`;
-                    _.each(smileys, (smiley) => {
-                        const reg = new RegExp(`${smiley.name}`, 'i');
-                        if (reg.test(component.name)) {
-                            returnText += ` ${smiley.emoji}`;
-                        }
-                    });
+                    returnText += `    ▪︎ ${component.name}`;
+                    returnText += addSmiley(component.name);
                     returnText += '\n';
                 });
             });
