@@ -76,7 +76,7 @@ const myDots = {
     "komplett" : '🅰️  ',
     "vegetarisch" : '🅱️  ',
     "mensacafe" : '☕️  ',
-    "mensacafe-abend" : '🧛  ',
+    "mensacafe-abend" : '🌙  ',
     "freeflow" : '🆓  ',
 }
 
