@@ -37,10 +37,11 @@ bot.command(appendName(['witz', 'kicher']), ({ reply }) => najax({ url: 'http://
 const isAdmin = ctx => ctx.from.id == process.env.ADMIN;
 
 bot.command(appendName(['restart']), (ctx) => {
-	if (isAdmin(ctx)) {
-		ctx.reply('Restarting bot...');
-		throw 'Restart';
-	}
+    if (isAdmin(ctx)) {
+        ctx.reply('Restarting bot...');
+        const stop = 'Restart';
+        throw stop;
+    }
 });
 bot.command(appendName(['uptime', 'up']), ({ replyWithMarkdown }) => child_process.exec('uptime', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
 bot.command(appendName(['cow']), ({ replyWithMarkdown }) => child_process.exec('cowfortune', (err, stdout) => replyWithMarkdown(`\`\`\` ${stdout} \`\`\``)));
@@ -72,14 +73,14 @@ bot.command(appendName(['getip']), (ctx) => {
 });
 bot.command(appendName(['start']), ({ reply }) => reply('Sasehashs fantastical Bot. Look me up on Github (https://github.com/samsumas/Funny-TelegramBot).\n\n btw it uses Arch ❤️'));
 
-const myDots = { 
-    "komplett" : '🅰️  ',
-    "vegetarisch" : '🅱️  ',
-    "mensacafe" : '☕️  ',
-    "mensacafe-abend" : '🌇  ',
-    "freeflow" : '🆓  ',
-    "mensagarten" : '🏝  ',
-}
+const myDots = {
+    komplett: '🅰️  ',
+    vegetarisch: '🅱️  ',
+    mensacafe: '☕️  ',
+    'mensacafe-abend': '🌇  ',
+    freeflow: '🆓  ',
+    mensagarten: '🏝  ',
+};
 
 const addDots = (str) => {
     try {
@@ -87,9 +88,9 @@ const addDots = (str) => {
     } catch (err) {
         return '◾️ ';
     }
-}
+};
 const addSmiley = (mealName) => {
-    returnText = ""
+    let returnText = '';
     _.each(smileys, (smiley) => {
         const reg = new RegExp(`${smiley.name}`, 'i');
         if (reg.test(mealName)) {
@@ -97,15 +98,20 @@ const addSmiley = (mealName) => {
         }
     });
     return returnText;
-}
+};
 
-const todayOrMorrow = [ 'Heute', 'Morgen' ];
+const todayOrMorrow = ['Heute', 'Morgen'];
+
+const blackMealList = ['Salatbuffet'];
+const isBlockedMeal = new RegExp(blackMealList.join('|'), 'i');
+const blackComponentList = ['Salatso.e'];
+const isBlockedComponent = new RegExp(blackComponentList.join('|'), 'i');
 
 const counterToString = (counters) => {
-    returnText = "";
+    let returnText = '';
     _.each(counters, (counter) => {
         _.each(counter.meals, (meal) => {
-            if (/Salatbuffet/.test(meal.name)) { return; }
+            if (isBlockedMeal.test(meal.name)) { return; }
 
             returnText += addDots(counter.id);
 
@@ -118,25 +124,27 @@ const counterToString = (counters) => {
             returnText += addSmiley(meal.name);
 
             if (meal.prices) {
-                returnText += `  (${meal.prices.s}€)`
+                returnText += `  (${meal.prices.s}€)`;
             }
 
             returnText += '\n';
 
             _.each(meal.components, (component) => {
-                returnText += `    ▪︎ ${component.name}`;
-                returnText += addSmiley(component.name);
-                returnText += '\n';
+                if (!isBlockedComponent.test(component.name)) {
+                    returnText += `    ▪︎ ${component.name}`;
+                    returnText += addSmiley(component.name);
+                    returnText += '\n';
+                }
             });
         });
     });
     return returnText;
-}
+};
 
-const mensa = (index) => ({ replyWithHTML }) => {
+const mensa = index => ({ replyWithHTML }) => {
     najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
         najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/mensagarten` }).success((res2) => {
-            const jsons = [ JSON.parse(res), JSON.parse(res2) ];
+            const jsons = [JSON.parse(res), JSON.parse(res2)];
 
             let returnText = `<b>${todayOrMorrow[index]}</b> :🍽🍴\n`;
 
@@ -147,8 +155,7 @@ const mensa = (index) => ({ replyWithHTML }) => {
             replyWithHTML(returnText);
         });
     });
-}
-
+};
 
 
 bot.command(appendName(['mensa']), mensa(0));
