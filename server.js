@@ -76,8 +76,9 @@ const myDots = {
     "komplett" : '🅰️  ',
     "vegetarisch" : '🅱️  ',
     "mensacafe" : '☕️  ',
-    "mensacafe-abend" : '🌙  ',
+    "mensacafe-abend" : '🌇  ',
     "freeflow" : '🆓  ',
+    "mensagarten" : '🏝  ',
 }
 
 const addDots = (str) => {
@@ -100,42 +101,51 @@ const addSmiley = (mealName) => {
 
 const todayOrMorrow = [ 'Heute', 'Morgen' ];
 
-const mensa = (index) => ({ replyWithHTML }) => {
-    najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
-        const json = JSON.parse(res);
+const counterToString = (counters) => {
+    returnText = "";
+    _.each(counters, (counter) => {
+        _.each(counter.meals, (meal) => {
+            if (/Salatbuffet/.test(meal.name)) { return; }
 
-        let returnText = `<b>${todayOrMorrow[index]}</b> :🍽🍴\n`;
+            returnText += addDots(counter.id);
 
-        const day = json.days[index];
+            if (meal.category) {
+                returnText += `<b>${meal.category}</b> : `;
+            }
 
-        _.each(day.counters, (counter) => {
-            _.each(counter.meals, (meal) => {
-                if (/Salatbuffet/.test(meal.name)) { return; }
+            returnText += `${meal.name}`;
 
-                returnText += addDots(counter.id);
+            returnText += addSmiley(meal.name);
 
-                if (meal.category) {
-                    returnText += `<b>${meal.category}</b> : `;
-                }
+            if (meal.prices) {
+                returnText += `  (${meal.prices.s}€)`
+            }
 
-                returnText += `${meal.name}`;
+            returnText += '\n';
 
-                returnText += addSmiley(meal.name);
-
-                if (meal.prices) {
-                    returnText += `  (${meal.prices.s}€)`
-                }
-
+            _.each(meal.components, (component) => {
+                returnText += `    ▪︎ ${component.name}`;
+                returnText += addSmiley(component.name);
                 returnText += '\n';
-
-                _.each(meal.components, (component) => {
-                    returnText += `    ▪︎ ${component.name}`;
-                    returnText += addSmiley(component.name);
-                    returnText += '\n';
-                });
             });
         });
-        replyWithHTML(returnText);
+    });
+    return returnText;
+}
+
+const mensa = (index) => ({ replyWithHTML }) => {
+    najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/sb` }).success((res) => {
+        najax({ url: `https://mensaar.de/api/1/${process.env.MENSA_KEY}/1/de/getMenu/mensagarten` }).success((res2) => {
+            const jsons = [ JSON.parse(res), JSON.parse(res2) ];
+
+            let returnText = `<b>${todayOrMorrow[index]}</b> :🍽🍴\n`;
+
+            _.each(jsons, (json) => {
+                const day = json.days[index];
+                returnText += counterToString(day.counters);
+            });
+            replyWithHTML(returnText);
+        });
     });
 }
 
